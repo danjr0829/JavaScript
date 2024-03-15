@@ -113,6 +113,13 @@
 		targetArray.splice(2, 0, 40, 50);
 		console.log(targetArray);
 
+		// 배열 여부 확인
+		// Array.isArray(data)
+		let exNull = null;
+		console.log(typeof targetArray);
+		console.log(typeof exNull);
+		console.log(Array.isArray(targetArray), '<-- 배열 여부');
+		console.log(Array.isArray(exNull), '<-- 배열 여부');
 	</script>
 
 	<h2>얕은복사 vs 깊은복사</h2>
