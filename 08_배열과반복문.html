@@ -10,7 +10,23 @@
 <body>
     <h1>배열과 반복문</h1>
 	<script type="text/javascript">
-        
+        const array = [100, 200, 300, 400];
+        for(let idx = 0; idx<array.length; idx += 1){
+            // 배열 원소 순차 접근
+            console.log(array[idx]);
+        }
+
+        // for of 구문
+        for(const element of array){
+            // 배열 원소 순차 접근
+            console.log(element);
+        }
+
+        // 객체 순회 시 활용하는 for in 구문
+        for(const key in array){
+            // 배열 원소 순차 접근
+            console.log(array[key]);
+        }
 	</script>
 	
 </body>
