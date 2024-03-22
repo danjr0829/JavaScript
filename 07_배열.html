@@ -130,7 +130,28 @@
 						복사 후 다른 주소를 참조 (인스턴스 생성 o)<br>
 						'실제 값'을 새로운 메모리 공간에 복사하는 것을 의미<br>
 	<script type="text/javascript">
+		console.log(`========== 얕은 복사 vs 깊은 복사 ==========`);
+		let num = 100;
+		let copyNum = num;
+		num = 200;
+		console.log(num == copyNum);
+
+		// 생성된 객체의 주소값이 변수에 할당
+		const exArr = [100, 200];	// 참조 데이터 타입 : 객체
+		const copyArr = exArr;	// 주소값을 복사 : 얕은 복사
+		copyArr[1] = 300;
+		console.log(exArr);
+		console.log(copyArr);
+		console.log(exArr == copyArr);
 		
+		const exArr2 = [100, 200, [300]];
+		const deepCopyArr = [];	// 새로운 배열을 생성
+		for(const element of exArr2){
+			deepCopyArr.push(element);	// 새로운 배열에 요소를 복사(값일 수도 있고 주소일 수도 있음)
+		}
+		deepCopyArr[1] = 300;	// 서로 다른 주소를 참조하기 때문에 영향을 미치지 않음
+		console.log(exArr2);
+		console.log(deepCopyArr);
 	</script>
 </body>
 </html>

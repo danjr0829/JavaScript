@@ -72,13 +72,13 @@
 		}
 
 		// break는 가장 인접한 반복문에서 빠져나온다.
-		for(let i=0; i<2; i++){
-			console.log(`i:${i+1}번 실행`);
-			for(let j=0; j<2; j++){
-				if(j==1) break;
-				console.log(`j:${j+1}번 실행`);
-			}
-		}
+		outerFor : for(let i=0; i<2; i++){
+						console.log(`i:${i+1}번 실행`);
+						for(let j=0; j<2; j++){
+							if(j==1) break outerFor;
+							console.log(`j:${j+1}번 실행`);
+						}
+					}
 	</script>
 	
 	<h1>continue</h1>

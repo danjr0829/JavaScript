@@ -137,6 +137,24 @@
 
 		const resultYN = (passYN == 'pass') ? '해당 교과목을 이수하셨습니다.' : '해당 교과목을 미이수하셨습니다.';
 		console.log(resultYN);
+
+		// 실습 2 사용자가 로그인 시 해당 아이디가 존재하진 않으면
+		// '해당 아이디가 존재하지 않습니다.'
+		// 비밀번호가 틀리면 '입력하신 비밀번호가 일치하지 않습니다.'
+		// 로그인 성공 시 'id001님 로그인 하셨습니다.' 삼항연산자로 구현
+
+		const inputId = 'id001';
+		const inputPw = 'pw001';
+
+		const dbId = 'id001';
+		const dbPw = 'pw002';
+
+		const loginResult = (inputId == dbId)
+							?(inputPw == dbPw)
+								?`${inputId}님 로그인 하셨습니다.`
+								:'입력하신 비밀번호가 일치하지 않습니다.'
+							:'해당 아이디가 존재하지 않습니다.';
+		console.log(loginResult);
 	</script>
 
 	<h2>null 병합 연산자</h2>
