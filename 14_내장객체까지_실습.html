@@ -13,11 +13,21 @@
 	2024-04-18 
     <!-- 출력: 2024년 04월 20일 (토) -->
 	<script type="text/javascript">
-		
-
 		const targetDate = new Date('2024-04-18');
-		
 
+		Date.prototype.plusDate = function(num) {
+			this.setDate(this.getDate() + num);
+			const fullYear = this.getFullYear();
+			const month = this.getMonth() + 1;
+			const date = this.getDate();
+			const day = this.getDay();
+			const dayArr = ['일', '월', '화', '수', '목', '금', '토'];
+
+			return `${fullYear}년 ${month}월 ${date}일 ${dayArr[day]}요일`;
+		}
+		
+		console.log(targetDate.plusDate(2));
+		
 	</script>
 	
 	<h2>실습2</h2>
@@ -26,7 +36,19 @@
 	<!-- 입력하신 날짜는 20일 이전 날짜입니다. -->
 	<script type="text/javascript">
 		const currentDay = new Date();
-		const targetDate2 = new Date('2024-04-01');
+		const targetDate2 = new Date('2024-05-08');
+
+		const diff = (currentDay - targetDate2) / 1000 / 60 / 60 / 24;
+
+		if(diff > 1){
+			console.log(`입력하신 날짜는 ${Math.floor(diff)}일 이전 날짜입니다.`);
+		} else if(diff < 0){
+			console.log(`입력하신 날짜는 ${Math.floor(diff)}일 이전 날짜입니다.`);
+		} else{
+			console.log(`입력하신 날짜는 오늘입니다.`);
+		}
+     	console.log(diff);
+		
 		
 	</script>
 	
@@ -41,6 +63,21 @@
 			new Date('2021-12-21'),
 			new Date('2024-07-22')
 		];
+
+		// let count = 0;
+		// const now = new Date();
+
+		// for(const element of dateArray) {
+		// 	if(now.getTime() < element.getTime()){
+		// 		count++;
+		// 	}
+		// }
+		// console.log(count);
+		
+		const dateFilter = dateArray.filter(date => date > currentDay);
+		print = `오늘 날짜보다 큰 날짜 객체의 갯수 : ${dateFilter.length}`;
+		console.log(print);
+		
 		
 		
 
@@ -55,6 +92,17 @@
 			{userName : '유관순', userAddr : '전주시 덕진동 1길 774'},
 			{userName : '이순신', userAddr : '전주시 반월동 3길 55'}
 		]
+
+		// for(const element of userArray) {
+		// 	let num = element.userAddr.indexOf('덕진동');
+		// 	if(num >= 0) {
+		// 		console.log(element.userName);
+		// 	}
+		// }
+
+		print = userArray.filter(element => element.userAddr.includes('덕진동'))
+						 .map(element => element.userName).sort().join(', ');
+		console.log(print);
 		
 	</script>
 	
@@ -70,9 +118,19 @@
 			'ksmart123@hot.co.kr'
 		]
 
+		// for(const element of mailArray) {
+		// 	let siteName = element.match(/@(.+?)\./);
+		// 	console.log(siteName[1]);
+		// }
+		const siteNameFn = element => {
+			return element.substring(element.indexOf('@')+1, element.indexOf('.'));
+		}
+
+		print = mailArray.map(element => siteNameFn(element)).join(', ');
+
+		console.log(print);
 		
-		
-		
+
 	</script>
 	
 	<h2>실습6</h2>
@@ -83,11 +141,54 @@
 		
 		// 출력물
 		// {userCode : 00001, userNum : 10}
+
+		// let infoPair = myUrl.split('?')[1].split('&');
+		
+		// let userInfo = {};
+
+		// for(let element of infoPair) {
+		// 	let[key, value] = element.split('=');
+		// 	userInfo[key] = value;
+		// }
+
+		// infoPair.map
+
+		// console.log(userInfo);
+
+		let queryParam = myUrl.substring(myUrl.indexOf('?')+1).split('&');
+		const userInfo= {};
+		queryParam.reduce((acc, cur) => {
+			const param = cur.split('=');
+			acc[param[0]] = param[1];
+			return acc;
+		}, userInfo);
+
+		console.log(queryParam);
 		console.log(userInfo);
+		
+		
+		
+
 		// 출력물
 		// [{userCode : 00001}, {userNum : 10}]
-		
+	
+		const resultArr = queryParam.map(param => {
+			const obj = {};
+			const parseParam = param.split('=');
+			obj[parseParam[0]] = parseParam[1];
+			return obj
+		})
 		console.log(resultArr);
+
+		/*
+		const urlObj = new URL(myUrl);
+		const keyArr = [...urlObj.searchParams.keys()];
+		keyArr.forEach(item => {
+			const value = urlObj.searchParams.get(item);
+			console.log(`parameterKey : ${item}, parameterValue : ${value}`);
+		})
+		console.log(keyArr);
+		*/
 
 	</script>
 	
@@ -117,14 +218,42 @@
                         {"baseDate":"20231117","baseTime":"1400","category":"POP","fcstDate":"20231123","fcstTime":"1900","fcstValue":"60","nx":63,"ny":89},
                         {"baseDate":"20231117","baseTime":"1400","category":"WAV","fcstDate":"20231123","fcstTime":"1900","fcstValue":"0","nx":63,"ny":89},
                         {"baseDate":"20231117","baseTime":"1400","category":"PCP","fcstDate":"20231123","fcstTime":"1900","fcstValue":"강수없음","nx":63,"ny":89},
-                        {"baseDate":"20231117","baseTime":"1400","category":"TMP","fcstDate":"20231122","fcstTime":"1900","fcstValue":"15","nx":63,"ny":89},
+                        {"baseDate":"20231117","baseTime":"1400","category":"TMP","fcstDate":"20231123","fcstTime":"1900","fcstValue":"15","nx":63,"ny":89},
                         {"baseDate":"20231117","baseTime":"1400","category":"REH","fcstDate":"20231123","fcstTime":"1900","fcstValue":"75","nx":63,"ny":89}
                         ];
+		
+		const parseFcst = {};
+		response.reduce((acc, cur) => {
+			if(cur.fcstDate == '20231123'){
 
+				const cate = cur.category;
+				let value = cur.fcstValue;
+
+				switch (cate){
+					case 'SKY':
+						if(value == '1'){
+							value = '맑음';
+						} else if(value == '3'){
+							value = '구름 많음';
+						} else{
+							value = '흐름';
+						}
+						acc['하늘상태'] = value;
+						break;
+
+					case 'TMP':
+						acc['온도'] = `${value}°C`;
+						break;
+
+					case 'REH':
+						acc['습도'] = `${value}%`;
+						break;
+				}
+			}
+			return acc;
+		}, parseFcst)
+		console.log(parseFcst);
+	
     </script>  
-	
-
-	
-
 </body>
 </html>
