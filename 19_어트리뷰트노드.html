@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <link rel="icon" href="data:,">
     <title>어트리뷰트 노드 조작</title>
+    <style>
+        .ksmart-team{
+            color : yellow;
+            position : relative;
+            width : 400px;
+            height : 100px;
+            display : flex;
+            justify-content : center;
+            align-items : center;
+            background-color : blue;
+        }
+    </style>
 </head>
 <body>
     <h1>어트리뷰트 노드</h1>
     - HTML 요소는 여러 개의 어트리뷰트 (속성)을 가질 수 있다.<br>
     - 어트리뷰트이름 = '어트리뷰트값' 형식으로 정의<br>
     - 모든 요소노드는 Element.prototype.attribute로 취득 가능<br>
-    - attribute 프로퍼티는 getter만 존재하는 읽기 전용 접근자 프로퍼티<br>
+    - attributes 프로퍼티는 getter만 존재하는 읽기 전용 접근자 프로퍼티<br>
     - NamedNodeMap 객체 반환<br>
 
     <h1>어트리뷰트 종류</h1>
@@ -20,7 +32,10 @@
     <input type="text" id="ksmart" value="한국스마트정보교육원 신입개발자">
     
     <script>
-      
+        const $ksmart = document.getElementById('ksmart');
+        const attributes = $ksmart.attributes;
+        console.log(attributes.type.value);
+        console.log(attributes.id.value);
     </script>
 
     <h2>HTML 어트리뷰트 조작</h2>
@@ -40,18 +55,35 @@
     </form>
 
     <script>
+       const $ksStudent = document.getElementById('ksStudent');
+       const valueAttr = $ksStudent.getAttribute('value');
+       console.log(valueAttr);
+       $ksStudent.setAttribute('value', '경력자 같은 신입 개발자 51기');
        
+       const $confirmBtn = document.querySelector('#confirmBtn');
+       $confirmBtn.onclick = function() {
+        const $memberId = document.querySelector('input[name="memberId"]');
+        $memberId.setAttribute('value', '개발자 51기');
+       }
     </script>
 
-    <h2>어트리뷰트 propertie vs DOM propertie</h2>
-    - 어트리뷰트 propertie(초기상태 값 유지)<br>
-    - DOM propertie(동적, 최신상태)<br>
+    <h2>어트리뷰트 property vs DOM property</h2>
+    - 어트리뷰트 property(초기상태 값 유지)<br>
+    - DOM property(동적, 최신상태)<br>
     
-    <input type="text" id="ks50Student" value="개발자 51기">
+    <input type="text" id="ks51Student" value="개발자 51기">
     <button type="button" id="exBtn">프로퍼티 확인</button>
     
     <script>
-        
+        const $exBtn = document.querySelector('#exBtn');
+        $exBtn.onclick = function() {
+            const $ks51Student = document.getElementById('ks51Student');
+            const attrPropValue = $ks51Student.getAttribute('value');
+            const domPropValue = $ks51Student.value;
+            const print = `attrPropValue: ${attrPropValue}, 
+                            domPropValue: ${domPropValue}`;
+            alert(print);
+        }
     </script>
 
     <h2>data 어트리뷰트와 dataset 프로퍼티</h2>
@@ -69,11 +101,28 @@
     
     <div class="ex-data"></div>
     <script>
-        
+        const $addGoodsBtn = document.querySelector('#addGoodsBtn');
+        console.log($addGoodsBtn.dataset);
+        console.log($addGoodsBtn.dataset.goodsCode);
         
         // 실습1. ex-data 클래스 요소에 다음과 같이 텍스트노드를 삽입하시오.
         // goodsCode:"g001", goodsName: "모니터", goodsPrice:"1000000", sellerId:"id001"
-        
+
+        $addGoodsBtn.onclick = function() {
+            /* ul>li * n */
+            const $exData = document.querySelector('.ex-data');
+            const dataObj = this.dataset;
+            $exData.replaceChildren();  //  초기화
+            const $ul = document.createElement('ul');
+            
+            for(name in dataObj) {
+                const $li = document.createElement('li');
+                $li.textContent = `${name} : ${dataObj[name]}`;
+                $ul.append($li);
+            }
+            $exData.append($ul);
+        }
+
     </script>
     <br>
     <!-- 실습. data속성을 값을 활용하여 아래 #teamUl요소 안 list완성하시오-->
@@ -88,7 +137,19 @@
     <ul id="teamUl">
     </ul>
     <script type="text/javascript">
-        
+        const $teamBtn = document.getElementById('teamBtn');
+        $teamBtn.onclick = function() {
+            const $teamUl = document.getElementById('teamUl');
+            const $domFragment = document.createDocumentFragment();
+            const dataset = this.dataset;
+            $teamUl.innerHTML = ''; //  초기화
+            for(const key in dataset){
+                const $li = document.createElement('li');
+                $li.textContent = `${key} : ${dataset[key]}`;
+                $domFragment.appendChild($li);
+            }
+            $teamUl.appendChild($domFragment);
+        }
     </script>
    
     <h2>스타일</h2>
@@ -104,7 +165,24 @@
         </div>
     </div>
     <script>
-        
+        const $ksmartTeam = document.querySelector('.ksmart-team');
+        console.log($ksmartTeam.style);
+        //  background-color : - 를 기준으로 카멜 표기법으로 속성이 정의되어있다.
+        console.log($ksmartTeam.style.color);
+        console.log($ksmartTeam.style['background-color']);
+        // $ksmartTeam.style.color = 'yellow';
+        // $ksmartTeam.style.position = 'relative';
+        // $ksmartTeam.style.width = '400px';
+        // $ksmartTeam.style.height = '100px';
+        // $ksmartTeam.style.display = 'flex';
+        // $ksmartTeam.style.justifyContent = 'center';
+        // $ksmartTeam.style.alignItems = 'center';
+        // $ksmartTeam.style.backgroundColor = 'blue';
+
+        $ksmartTeamDiv = $ksmartTeam.querySelector('div');
+        $ksmartTeamDiv.style.border = '1px solid yellow';
+        $ksmartTeamDiv.style.width = '330px';
+        $ksmartTeamDiv.style.padding = '5px';
     </script>
 
     <h2>클래스 조작</h2>
@@ -113,9 +191,21 @@
     - 클래스 변경 : replace('변경할 클래스명', '새로운 클래스명')<br>
 
     <p class="p-ksmart">한국스마트정보교육원 51기</p>
-    
-    <script>
+    <style>
+        p.text-blue{
+            color : blue;
+        }
 
+        p.text-red{
+            color : red;
+        }
+    </style>
+    <script>
+        const $pKsmart = document.querySelector('.p-ksmart');
+        console.log($pKsmart.className);
+        $pKsmart.className += ' text-blue';
+        console.log($pKsmart.className);
+        $pKsmart.className = $pKsmart.className.replace('text-blue', '');
     </script>
 
     <h3>classList</h3>
@@ -133,7 +223,16 @@
         
     <p class="ksmart-dev">글로벌 최상위 1% ICT 전문가</p>
     <script>
-        
+        const $ksmartDev = document.querySelector('.ksmart-dev');
+        const classList = $ksmartDev.classList;
+        classList.add('text-blue');
+        classList.add('ksmart-51');
+        classList.remove('ksmart-51');
+        console.log(classList.item(1));
+        console.log(classList.contains('text-blue'));
+        console.log(classList.contains('ksmart-51'));
+        classList.replace('text-blue', 'text-red');
+        console.log(classList);
         
         /**
          *  toggle('클래스명')
@@ -144,6 +243,15 @@
          *    - 두번째 인수 값이 false : 삭제
          */
         
+         classList.toggle('text-red');
+         console.log(classList);
+         classList.toggle('text-red');
+         console.log(classList);
+         // == 비교연산자
+         classList.toggle('text-red', false);
+         console.log(classList);
+         classList.toggle('text-red', true);
+         console.log(classList);
     </script>
 
 </body>

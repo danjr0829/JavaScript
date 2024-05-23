@@ -159,13 +159,18 @@
         
         $ksmartTeamUl.after($newDiv1);
         // 팀원의 이름 li 태그 생성 후 화면에 출력하시오.
-        const nameArr = ['고윤영', '이희상', '이동근', '오민호', '전우석', '한동환'];
+        const nameArr = ['고윤영', '이희상', '오민호', '전우석', '한동환'];
+
+        //  div li 그룹핑
+        const $newDiv = document.createElement('div');
 
         nameArr.forEach(name =>{
             const $newLi = document.createElement('li');
-            $newLi.textContent = name;
-            $newUl1.append($newLi);
+            $newLi.textContent = `팀원 : ${name}`;
+            $newDiv.append($newLi);
         })
+
+        $newUl1.appendChild($newDiv);
     </script>
 
     <h2>복수의 노드 생성과 추가</h2>
@@ -182,20 +187,93 @@
         </ul>
     </div>
     <script>
-
+        const $domFragment = document.createDocumentFragment();
+        const $ksTeam = document.querySelector('#ksTeam');
+        nameArr.forEach(name =>{
+            const $newLiEle = document.createElement('li');
+            $newLiEle.textContent = `팀원 : ${name}`;
+            $domFragment.append($newLiEle);
+        })
+        $ksTeam.appendChild($domFragment);
+        console.log($domFragment);      
     </script>
 
     <h2>노드 이동 및 특정 위치에 삽입</h2>
     <h3>insertBefore(새로운노드, 위치)</h3>
     <script>
-        
+        const $exLiEle = document.createElement('li');
+        $exLiEle.textContent = '팀원 : 뉴비';
+       // $ksTeam.insertBefore($exLiEle, $ksTeam.lastElementChild);
+       // $ksTeam.insertBefore($exLiEle, $ksTeam.children[3]);
+       $ksTeam.insertBefore($exLiEle, null);
+    </script>
+
+    <h2>노드 이동 - 예제</h2>
+    <ul id="exUl">
+        <li>
+            내용-가
+            <button type="button" class="up">▲</button>
+            <button type="button" class="down">▼</button>
+        </li>
+        <li>
+            내용-나
+            <button type="button" class="up">▲</button>
+            <button type="button" class="down">▼</button>
+        </li>
+        <li>
+            내용-다
+            <button type="button" class="up">▲</button>
+            <button type="button" class="down">▼</button>
+        </li>
+        <li>
+            내용-라
+            <button type="button" class="up">▲</button>
+            <button type="button" class="down">▼</button>
+        </li>
+    </ul>
+
+    <script>
+        const $upBtns = document.querySelectorAll('.up');
+        const $downBtns = document.querySelectorAll('.down');
+
+        $upBtns.forEach(element => {
+            //console.log(element);
+            element.onclick = function() {
+                const $targetLi = this.parentNode;
+                const $targetUl = this.closest('ul');
+                if($targetLi == $targetUl.firstElementChild) return;
+                $targetUl.insertBefore($targetLi, $targetLi.previousElementSibling);
+            }
+        })
+
+        $downBtns.forEach(element => {
+            element.onclick = function() {
+                const $targetLi = this.parentNode;
+                const $targetUl = this.closest('ul');
+                if($targetLi == $targetUl.lastElementChild) return;
+                $targetUl.insertBefore($targetLi.nextElementSibling, $targetLi);
+            }
+        })
     </script>
 
     <h2>노드 교체 및 노드 삭제</h2>
     <h3>replaceChild(새로운 노드, 노드 위치) - 교체</h3>
     <h3>removeChild(노드 위치) - 삭제</h3>
     <script>
+        const $newEleNode = document.createElement('li');
+        $newEleNode.textContent = '팀원 : 뉴비2';
 
+        // 특정 노드를 교체(new li, 기존 li 위치);
+        $ksTeam.replaceChild($newEleNode, $ksTeam.lastElementChild);
+        // $ksTeam ul 태그의 마지막 li 요소 삭제
+        $ksTeam.removeChild($ksTeam.lastElementChild);
+
+        // replaceChildren() 인수 없이 호출 시 자식 노드 삭제
+        // (==) 부모노드.innerHTML = ''
+        $ksTeam.replaceChildren();
+
+        // 특정 노드 삭제, 타겟 노드.remove();
+        $ksTeam.remove();
     </script>
 
     <h2>노드복사</h2>
@@ -209,7 +287,20 @@
     </ul>
 
     <script>
+        const $exClone = document.querySelector('.ex-clone');
+       const $exClone1 = document.getElementsByClassName('ex-clone');
+       const $exClone2 = document.querySelectorAll('.ex-clone');
        
+       console.log($exClone);
+       console.log($exClone1);
+       console.log($exClone2);
+
+       const $targetNode = $exClone.firstElementChild;
+       const $copyNode1 = $targetNode.cloneNode();   // 인수 없이 호출 default : false
+       console.log($copyNode1);
+
+       const $copyNode2 = $targetNode.cloneNode(true);
+       console.log($copyNode2);
     </script>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
