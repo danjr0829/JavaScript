@@ -19,7 +19,20 @@
 	</form>
 	
 	<script type="text/javascript">
-       
+        const $btn = document.querySelector('button[type="button"]');
+
+        $btn.addEventListener('click', function(event){
+            const $n1 = document.querySelector('input[name="n1"]');
+            const n1 = Number($n1.value);
+
+            const $n2 = document.querySelector('input[name="n2"]');
+            const n2 = Number($n2.value);
+
+            const answer = n1 * n2;
+
+            const $result = document.querySelector('input[name="result"]');
+            $result.setAttribute('value', answer);
+        });
 	</script>
 
     <h2>실습2</h2>
@@ -47,7 +60,35 @@
     <input type="number" id="times" value="2" min="2" max="9" placeholder="단을 입력하시오"/> 
     <button id="guguBtn">구구단 출력</button>
     <script type="text/javascript">
-       
+        const $guguBtn = document.querySelector('#guguBtn');
+
+        $guguBtn.addEventListener('click', function(e){
+            const $number = document.querySelector('input[type="number"]');
+            const num = Number($number.value);
+
+            const $table = document.createElement('table');
+            const $thead = document.createElement('thead');
+            const $tbody = document.createElement('tbody');
+            const $theadTr = document.createElement('tr');
+            const $th = document.createElement('th');
+
+            $th.textContent = `${num}단`;
+            $theadTr.appendChild($th);
+            $thead.appendChild($theadTr);
+
+            for(let i = 1; i < 10; i++){
+                const $tr = document.createElement('tr');
+                const $td = document.createElement('td');
+                $td.textContent = `${num} X ${i} = ${num * i}`;
+                $tr.appendChild($td);
+                $tbody.appendChild($tr);
+            }
+
+            $table.append($thead, $tbody);
+            console.log($table);
+            document.querySelector('section').replaceChildren($table);
+        });
+
 	</script>
 
     <h2>실습3</h2>
@@ -57,7 +98,30 @@
     <div id="bgDiv" style="height: 100px; width: 100px;"></div>
 
     <script type="text/javascript">
-        
+        const $bgChangeBtn = document.querySelector('#bgChangeBtn');
+
+        const colorArr = ['red', 'blue', 'green'];
+        const $bgDiv = document.querySelector('#bgDiv');
+        const clickCnt = (num => () => num++)(0);
+        $bgChangeBtn.addEventListener('click', function(){
+            const length = colorArr.length;
+            $bgDiv.style.backgroundColor = colorArr[clickCnt() % length];
+        });
+
+        // $bgChangeBtn.addEventListener('click', function(){
+        //     const $bgDiv = document.querySelector('#bgDiv');
+
+        //     if(!$bgDiv.style.backgroundColor){
+        //         $bgDiv.style.backgroundColor = 'red';
+        //     } else if($bgDiv.style.backgroundColor == 'red'){
+        //         $bgDiv.style.backgroundColor = 'blue';
+        //     } else if($bgDiv.style.backgroundColor == 'blue'){
+        //         $bgDiv.style.backgroundColor = 'green';
+        //     } else if($bgDiv.style.backgroundColor == 'green'){
+        //         $bgDiv.style.backgroundColor = 'red';
+        //     }
+        // });
+
     </script>
 
     <h2>실습4</h2>
@@ -117,7 +181,67 @@
       </div>
     </div>
     <script type="text/javascript">
-        
+        const $allCheck = document.querySelector('#allCheck');
+        $allCheck.addEventListener('click', e => {
+            const target = e.target;
+            const $mChecks = document.querySelectorAll('.mCheck');
+            $mChecks.forEach(item => item.checked = target.checked);
+        });
+
+        const openModal = () => {
+            const $popup = document.querySelector('#popup');
+            $popup.style.display = 'flex';
+        }
+
+        const closeModal = () => {
+            const $popup = document.querySelector('#popup');
+            $popup.style.display = 'none';
+        }
+
+        const addRow = (selector, value) => {
+            const $tr = document.createElement('tr');
+            const $td = document.createElement('td');
+            const $input = document.createElement('input');
+            $input.type = 'checkbox';
+            $input.setAttribute('class', 'mCheck');
+
+            const $textNode = document.createTextNode(value);
+            $td.append($input, $textNode);
+            $tr.appendChild($td);
+            selector.appendChild($tr);
+        }
+
+        const addCate = () => {
+            const $tbody = document.querySelector('#checkTbody');
+            const $cateContent = document.querySelector('.cateContent');
+            const value = $cateContent.value;
+
+            if(!value){
+                alert('카테고리 항목을 입력해주세요.');
+                $cateContent.focus();
+                return;
+            }
+
+            addRow($tbody, value);
+            $allCheck.checked = false;
+            closeModal();
+        }
+
+        const $tbody = document.querySelector('#checkTbody');
+        const $addCateBtn = document.querySelector('#addCateBtn');
+        const $confirm = document.querySelector('#confirm');
+        const $close = document.querySelector('#close');
+        $addCateBtn.addEventListener('click', openModal);
+        $confirm.addEventListener('click', addCate);
+        $close.addEventListener('click', closeModal);
+
+        $tbody.addEventListener('click', function(e){
+            const target = e.target;
+            if(!target.classList.contains('mCheck')) return;
+            const $mChecks = document.querySelectorAll('.mCheck');
+            const $checkedEle = document.querySelectorAll('.mCheck:checked');
+            $allCheck.checked = ($mChecks.length == $checkedEle.length);
+        });
     </script>
 
     <h2>실습5</h2>
@@ -138,7 +262,19 @@
     <span id="totalPriceText" style="color: #f00; font-size: 25px">0</span>원
 
     <script type="text/javascript">
-        
+        const $num = document.querySelector('#num');
+
+        $num.addEventListener('change', function(event){
+            const amount = this.value;
+            
+            const $price = document.querySelector('span[style="color: #f00;"]').textContent;
+            const price = Number($price.replace(',', ''));
+            
+            const amt = amount * price;
+            
+            const $totalPrice = document.querySelector('#totalPriceText');
+            $totalPrice.textContent = amt.toLocaleString('ko-KR');
+        });
     </script>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
